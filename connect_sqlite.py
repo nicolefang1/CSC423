@@ -10,11 +10,51 @@ cursor = db_connect.cursor()
 
 # String variable for passing queries to cursor
 query = """
-    CREATE TABLE Person(
-    id INT,
-    name VARCHAR(100),
-    PRIMARY KEY(id)
-    );
+    -- Create Clinic
+    CREATE TABLE Clinic (
+    clinicNo int NOT NULL primary key,
+    name varchar(255),
+    address varchar(255) NOT NULL,
+    telephone char(10) NOT NULL);
+
+    -- Create Staff
+    CREATE TABLE Staff (
+    staffNo int NOT NULL primary key,
+    name varchar(255),
+    address varchar(255),
+    telephone char(10),
+    DOB date,
+    position varchar(255),
+    salary int,
+    clinicNo int foreign key references Clinic(clinicNo));
+
+    -- Create Owner
+    CREATE TABLE Owner (
+    ownerNo int NOT NULL primary key,
+    name varchar(255),
+    address varchar(255),
+    telephone char(10));
+
+    -- Create Pet
+    CREATE TABLE Pet (
+    petNo int NOT NULL primary key,
+    name varchar(255),
+    DOB date,
+    species varchar(255),
+    breed varchar(255),
+    color varchar(255),
+    ownerNo int foreign key references Owner(ownerNo);
+
+    -- Create Examination
+    CREATE TABLE Examination (
+    examNo int NOT NULL primary key,
+    chiefComplaint varchar(255),
+    description varchar(255),
+    dateSeen date,
+    actions varchar(255),
+    clinicNo int foreign key references Clinic(clinicNo),
+    petNo int foreign key references Pet(petNo));
+
     """
 
 # Execute query, the result is stored in cursor
