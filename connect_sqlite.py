@@ -24,8 +24,8 @@ query = """
     address varchar(255),
     telephone char(10),
     DOB date,
-    position varchar(255),
-    salary int,
+    position varchar(255) CHECK (position in ('Manager', 'Groomer', 'Vet'),
+    salary int CHECK (salary >= 0),
     clinicNo int foreign key references Clinic(clinicNo));
 
     -- Create Owner
