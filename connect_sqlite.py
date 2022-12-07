@@ -11,51 +11,49 @@ cursor = db_connect.cursor()
 # String variable for passing queries to cursor
 query = """
     -- Create Clinic
-    CREATE TABLE Clinic (
-        clinicNo int NOT NULL primary key,
-        clinicName varchar(255),
-        address varchar(255) NOT NULL,
-        telephone char(10) NOT NULL);
+    CREATE TABLE IF NOT EXISTS Clinic (
+        clinicNo integer NOT NULL primary key,
+        clinicName text,
+        address text NOT NULL,
+        telephone int NOT NULL);
 
     -- Create Staff
-    CREATE TABLE Staff (
-        staffNo int NOT NULL primary key,
-        staffName varchar(255),
-        address varchar(255),
-        telephone char(10),
+    CREATE TABLE IF NOT EXISTS Staff (
+        staffNo integer NOT NULL primary key,
+        staffName text,
+        address text,
+        telephone int,
         DOB date,
-        staffPos varchar(255) CHECK (staffPos in ('Manager', 'Groomer', 'Vet')),
-        salary int CHECK (salary >= 0),
-        clinicNo references Clinic(clinicNo));
+        staffPos text CHECK (staffPos in ('Manager', 'Groomer', 'Vet')),
+        salary integer CHECK (salary >= 0),
+        FOREIGN KEY (clinicNo) REFERENCES Clinic(clinicNo));
 
     -- Create Owner
-    CREATE TABLE Owner (
-        ownerNo int NOT NULL primary key,
-        ownerName varchar(255),
-        address varchar(255),
-        telephone char(10));
+    CREATE TABLE IF NOT EXISTS Owner (
+        ownerNo integer NOT NULL primary key,
+        ownerName text,
+        address text,
+        telephone int);
 
     -- Create Pet
-    CREATE TABLE Pet (
-        petNo int NOT NULL primary key,
-        petName varchar(255),
+    CREATE TABLE IF NOT EXISTS Pet (
+        petNo integer NOT NULL primary key,
+        petName text,
         DOB date,
-        species varchar(255),
-        breed varchar(255),
-        color varchar(255),
-        ownerNo int references Owner(ownerNo));
+        species text,
+        breed text,
+        color text,
+        FOREIGN KEY (ownerNo) REFERENCES Owner(ownerNo));
 
     -- Create Examination
-    CREATE TABLE Examination (
-        examNo int NOT NULL primary key,
-        chiefComplaint varchar(255),
-        description varchar(255),
+    CREATE TABLE IF NOT EXISTS Examination (
+        examNo integer NOT NULL primary key,
+        chiefComplaint text,
+        description text,
         dateSeen date,
-        actions varchar(255),
-        clinicNo int references Clinic(clinicNo),
-        petNo int references Pet(petNo));
-
-
+        actions text,
+        FOREIGN KEY (clinicNo) REFERENCES Clinic(clinicNo),
+        FOREIGN KEY (petNo) REFERENCES Pet(petNo));
     """
 
 # Execute query, the result is stored in cursor
